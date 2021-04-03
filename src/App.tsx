@@ -1,26 +1,30 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import './App.less'
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import { Routes } from './constants/Routes'
+import Assets from './views/Assets'
+import AddAsset from './views/AddAsset'
+import Asset from './views/Asset'
+import styled from 'styled-components/macro'
+
+const StyledHeader = styled.div`
+  height: 96px;
+  border-bottom: 1px solid #bfbfbf;
+`
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <Router>
+      <StyledHeader>Block Tracker</StyledHeader>
+      <Switch>
+        <Route path={Routes.assets} component={Assets} />
+        <Route path={Routes.addAsset} component={AddAsset} />
+        <Route path={Routes.asset} component={Asset} />
+        <Route path={Routes.settings} component={Asset} />
+        <Route component={Assets} />
+      </Switch>
+    </Router>
+  )
 }
 
-export default App;
+export default App

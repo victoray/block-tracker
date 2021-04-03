@@ -1,6 +1,6 @@
 # Block Tracker
-Block tracker is a blockchain tracking application that helps users keep track of their cryptocurrencies.
 
+Block tracker is a blockchain tracking application that helps users keep track of their cryptocurrencies.
 
 # Getting Started with Create React App
 
