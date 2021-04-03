@@ -1,11 +1,12 @@
 import React from 'react'
 import './App.less'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import styled from 'styled-components/macro'
+
 import { Routes } from './constants/Routes'
-import Assets from './views/Assets'
 import AddAsset from './views/AddAsset'
 import Asset from './views/Asset'
-import styled from 'styled-components/macro'
+import Assets from './views/Assets'
 
 const StyledHeader = styled.div`
   height: 96px;
@@ -17,10 +18,10 @@ function App() {
     <Router>
       <StyledHeader>Block Tracker</StyledHeader>
       <Switch>
-        <Route path={Routes.assets} component={Assets} />
-        <Route path={Routes.addAsset} component={AddAsset} />
-        <Route path={Routes.asset} component={Asset} />
-        <Route path={Routes.settings} component={Asset} />
+        <Route path={Routes.Assets} component={Assets} />
+        <Route path={Routes.AddAsset} component={AddAsset} />
+        <Route path={Routes.Asset} component={Asset} />
+        <Route path={Routes.Settings} component={Asset} />
         <Route component={Assets} />
       </Switch>
     </Router>

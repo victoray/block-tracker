@@ -1,6 +1,6 @@
 export enum Routes {
-  assets = '/assets',
-  addAsset = '/add-asset',
-  asset = '/asset',
-  settings = '/settings'
+  Assets = '/assets',
+  AddAsset = '/add-asset',
+  Asset = '/asset',
+  Settings = '/settings'
 }
