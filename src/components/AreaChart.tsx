@@ -46,6 +46,10 @@ const AreaChart: React.FC = () => {
     data,
     yField: 'value',
     xField: 'year',
+    line: {
+      size: 0.5,
+      color: '#1da57a'
+    },
     padding: 40,
     xAxis: {
       tickCount: 5
@@ -55,7 +59,7 @@ const AreaChart: React.FC = () => {
       tickCount: 5
     },
     areaStyle: function areaStyle() {
-      return { fill: 'l(270) 0:#ffffff 0.5:#7ec2f3 1:#1890ff' }
+      return { fill: 'rgba(29, 165, 122, 0.4)' }
     }
   }
 

@@ -1,17 +1,23 @@
 import React, { FC } from 'react'
-import { Statistic, Tag } from 'antd'
+import { Skeleton, Statistic, Tag } from 'antd'
 import { StyledCard } from './styles'
 import styled from 'styled-components/macro'
+import { useQuery } from 'react-query'
+import { getBalance } from '../api'
 
 const StyledTag = styled(Tag)`
   margin-left: auto;
 `
 
-const Balance: FC<{ value: number; change: number }> = ({ value, change }) => {
+const Balance: FC<{ value: number; change: number }> = () => {
+  const { isLoading, data } = useQuery('getBalance', () => getBalance())
+
   return (
     <StyledCard>
-      <Statistic title="Current Balance (USD)" value={value} precision={2} />
-      <StyledTag color="#cd201f">{change}%</StyledTag>
+      <Skeleton loading={isLoading}>
+        <Statistic title="Current Balance (USD)" value={data?.amount} precision={2} />
+        <StyledTag color="#cd201f">{data?.change}%</StyledTag>
+      </Skeleton>
     </StyledCard>
   )
 }

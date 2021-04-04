@@ -1,8 +1,18 @@
 import styled from 'styled-components/macro'
-import { Card, Table } from 'antd'
+import { Card, Space, Table } from 'antd'
+
+export const StyledBaseContainer = styled(Space)`
+  padding: 30px 200px;
+  width: 100%;
+
+  & > * {
+    width: 100%;
+  }
+`
 
 export const StyledTable = styled(Table)`
   border: 1px solid #303030;
+  border-radius: 16px;
   .ant-table-container {
     border-radius: 16px;
   }

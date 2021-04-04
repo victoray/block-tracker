@@ -3,20 +3,13 @@ import React from 'react'
 import styled from 'styled-components/macro'
 import { ColumnsType } from 'antd/lib/table'
 import AreaChart from '../components/AreaChart'
-import { Link } from 'react-router-dom'
-import { toAssetRoute } from '../constants/Routes'
-import { MoreOutlined, PlusOutlined } from '@ant-design/icons'
-import { StyledCard, StyledTable } from '../components/styles'
+import { Link, useHistory } from 'react-router-dom'
+import { Routes, toAssetRoute } from '../constants/Routes'
+import { DeleteOutlined, MoreOutlined, PlusOutlined } from '@ant-design/icons'
+import { StyledBaseContainer, StyledCard, StyledTable } from '../components/styles'
 import Balance from '../components/Balance'
-
-const StyledContainer = styled(Space)`
-  padding: 30px 200px;
-  width: 100%;
-
-  & > * {
-    width: 100%;
-  }
-`
+import { useQuery } from 'react-query'
+import { getAssets } from '../api'
 
 const StyledTitleContainer = styled.div`
   display: flex;
@@ -25,6 +18,7 @@ const StyledTitleContainer = styled.div`
 
 const StyledButton = styled(Button)`
   margin-left: auto;
+  border-radius: 16px;
 `
 
 const StyledChartContainer = styled.div`
@@ -57,22 +51,28 @@ const columns: ColumnsType<{}> = [
     render: (_, record) => (
       <Space>
         <Button icon={<PlusOutlined />} type={'link'} />
-        <Button icon={<MoreOutlined />} type={'link'} />
+        <Button icon={<DeleteOutlined />} type={'link'} />
       </Space>
     )
   }
 ]
 
 const Assets = () => {
+  const history = useHistory()
+
+  const { isLoading, data } = useQuery('assets', getAssets)
+
   return (
-    <StyledContainer direction={'vertical'} size={24}>
+    <StyledBaseContainer direction={'vertical'} size={24}>
       <StyledTitleContainer>
         <Space direction={'vertical'}>
           <Typography.Title level={3}>My Portfolio</Typography.Title>
           <Typography.Text type={'secondary'}>Accurately tracking your crypto investments</Typography.Text>
         </Space>
 
-        <StyledButton type="primary">Add Asset</StyledButton>
+        <StyledButton type="primary" onClick={() => history.push(Routes.AddAsset)}>
+          Add Asset
+        </StyledButton>
       </StyledTitleContainer>
 
       <Balance change={-24} value={300000} />
@@ -94,28 +94,9 @@ const Assets = () => {
       <div>
         <Typography.Title level={3}>My assets</Typography.Title>
 
-        <StyledTable
-          columns={columns}
-          dataSource={[
-            { name: 'Bitcoin', price: '58000', amount: 5.9 },
-            { name: 'Ethereum', price: '58000', amount: 5.9 },
-            { name: 'Ethereum', price: '58000', amount: 5.9 },
-            { name: 'Ethereum', price: '58000', amount: 5.9 },
-            { name: 'Ethereum', price: '58000', amount: 5.9 },
-            { name: 'Ethereum', price: '58000', amount: 5.9 },
-            { name: 'Ethereum', price: '58000', amount: 5.9 },
-            { name: 'Ethereum', price: '58000', amount: 5.9 },
-            { name: 'Ethereum', price: '58000', amount: 5.9 },
-            { name: 'Ethereum', price: '58000', amount: 5.9 },
-            { name: 'Ethereum', price: '58000', amount: 5.9 },
-            { name: 'Ethereum', price: '58000', amount: 5.9 },
-            { name: 'Ethereum', price: '58000', amount: 5.9 },
-            { name: 'Ethereum', price: '58000', amount: 5.9 }
-          ]}
-          pagination={false}
-        />
+        <StyledTable columns={columns} loading={isLoading} dataSource={data} pagination={false} />
       </div>
-    </StyledContainer>
+    </StyledBaseContainer>
   )
 }
 

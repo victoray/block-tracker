@@ -13,7 +13,7 @@ import {
   PlusOutlined
 } from '@ant-design/icons'
 import { ColumnsType } from 'antd/lib/table'
-import { StyledCard, StyledTable } from '../components/styles'
+import { StyledBaseContainer, StyledCard, StyledTable } from '../components/styles'
 import Balance from '../components/Balance'
 
 const columns: ColumnsType<{}> = [
@@ -24,6 +24,7 @@ const columns: ColumnsType<{}> = [
   { title: 'Price', dataIndex: 'price' },
   { title: 'Amount', dataIndex: 'amount' },
   { title: 'Fees', dataIndex: 'fees' },
+  { title: 'Date', dataIndex: 'date' },
   {
     title: '',
     width: 100,
@@ -36,15 +37,6 @@ const columns: ColumnsType<{}> = [
   }
 ]
 
-const StyledContainer = styled(Space)`
-  padding: 30px 200px;
-  width: 100%;
-
-  & > * {
-    width: 100%;
-  }
-`
-
 const StyledTitleContainer = styled.div`
   display: flex;
   align-items: center;
@@ -52,6 +44,7 @@ const StyledTitleContainer = styled.div`
 
 const StyledButton = styled(Button)`
   margin-left: auto;
+  border-radius: 16px;
 `
 
 type MatchParams = {
@@ -62,7 +55,7 @@ type Props = RouteComponentProps<MatchParams>
 
 const Asset: FC<Props> = ({ match }) => {
   return (
-    <StyledContainer direction={'vertical'} size={32}>
+    <StyledBaseContainer direction={'vertical'} size={32}>
       <StyledTitleContainer>
         <Space direction={'vertical'}>
           <Typography.Title level={3}>Your Portfolio</Typography.Title>
@@ -90,7 +83,7 @@ const Asset: FC<Props> = ({ match }) => {
           pagination={false}
         />
       </div>
-    </StyledContainer>
+    </StyledBaseContainer>
   )
 }
 
