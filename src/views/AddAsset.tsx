@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { StyledBaseContainer } from '../components/styles'
 import { Input, List, Typography } from 'antd'
 import { SearchOutlined } from '@ant-design/icons'
@@ -6,6 +6,8 @@ import styled from 'styled-components/macro'
 import { useQuery } from 'react-query'
 import { getCoinList } from '../api'
 import { sortBy } from 'lodash'
+import AppContext from '../AppContext'
+import { Coin } from '../type'
 
 const StyledInput = styled(Input)`
   border-radius: 16px;
@@ -21,17 +23,8 @@ const StyledImage = styled.img`
   margin-right: 10px;
 `
 
-type Coin = {
-  Id: string
-  Url: string
-  ImageUrl: string
-  Name: string
-  Symbol: string
-  CoinName: string
-  FullName: string
-}
-
 const AddAsset = () => {
+  const { setCurrentCoin } = useContext(AppContext)
   const { data: coinList } = useQuery('coinList', getCoinList)
   const [value, setValue] = useState('')
 
@@ -65,7 +58,7 @@ const AddAsset = () => {
         bordered
         dataSource={filteredData}
         renderItem={(item) => (
-          <List.Item key={item.Id}>
+          <List.Item key={item.Id} onClick={() => setCurrentCoin(item)}>
             <StyledImage src={`${BaseImageUrl}${item.ImageUrl}`} alt="" />
             {item.CoinName}
           </List.Item>

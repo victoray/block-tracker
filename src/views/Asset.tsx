@@ -15,16 +15,29 @@ import {
 import { ColumnsType } from 'antd/lib/table'
 import { StyledBaseContainer, StyledCard, StyledTable } from '../components/styles'
 import Balance from '../components/Balance'
+import { useQuery } from 'react-query'
+import { getAssets, getTransaction } from '../api'
+import { TransactionType } from '../api/types'
+import moment from 'moment'
 
+const getTypeValue = (type: TransactionType) => {
+  switch (type) {
+    case TransactionType.ADD:
+      return 'Add'
+    case TransactionType.REMOVE:
+      return 'Remove'
+  }
+}
 const columns: ColumnsType<{}> = [
   {
     title: 'Type',
-    dataIndex: 'type'
+    dataIndex: 'type',
+    render: getTypeValue
   },
   { title: 'Price', dataIndex: 'price' },
   { title: 'Amount', dataIndex: 'amount' },
   { title: 'Fees', dataIndex: 'fees' },
-  { title: 'Date', dataIndex: 'date' },
+  { title: 'Date', dataIndex: 'date', render: (date) => moment(date).format('DD-MM-YYYY') },
   {
     title: '',
     width: 100,
@@ -54,6 +67,8 @@ type MatchParams = {
 type Props = RouteComponentProps<MatchParams>
 
 const Asset: FC<Props> = ({ match }) => {
+  const { isLoading, data } = useQuery(`transaction-${match.params.asset}`, () => getTransaction(match.params.asset))
+
   return (
     <StyledBaseContainer direction={'vertical'} size={32}>
       <StyledTitleContainer>
@@ -70,18 +85,7 @@ const Asset: FC<Props> = ({ match }) => {
       <div>
         <Typography.Title level={3}>{capitalize(match.params.asset)} Transactions</Typography.Title>
 
-        <StyledTable
-          columns={columns}
-          dataSource={[
-            { type: 'Add', price: '58000', amount: 5.9 },
-            { type: 'Remove', price: '58000', amount: 5.9 },
-            { type: 'Remove', price: '58000', amount: 5.9 },
-            { type: 'Add', price: '58000', amount: 5.9 },
-            { type: 'Remove', price: '58000', amount: 5.9 },
-            { type: 'Remove', price: '58000', amount: 5.9 }
-          ]}
-          pagination={false}
-        />
+        <StyledTable loading={isLoading} columns={columns} dataSource={data as any} pagination={false} />
       </div>
     </StyledBaseContainer>
   )
