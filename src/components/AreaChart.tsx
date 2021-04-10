@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react'
 import { Area } from '@ant-design/charts'
 import { AreaOptions as G2plotProps } from '@antv/g2plot'
+import React, { useState, useEffect, useRef } from 'react'
 
 const AreaChart: React.FC = () => {
   const data = [

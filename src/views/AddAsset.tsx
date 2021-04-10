@@ -1,12 +1,13 @@
-import React, { useContext, useState } from 'react'
-import { StyledBaseContainer } from '../components/styles'
-import { Input, List, Typography } from 'antd'
 import { SearchOutlined } from '@ant-design/icons'
-import styled from 'styled-components/macro'
-import { useQuery } from 'react-query'
-import { getCoinList } from '../api'
+import { Input, List, Typography } from 'antd'
 import { sortBy } from 'lodash'
+import React, { useContext, useState } from 'react'
+import { useQuery } from 'react-query'
+import styled from 'styled-components/macro'
+
 import AppContext from '../AppContext'
+import { getCoinList } from '../api'
+import { StyledBaseContainer } from '../components/styles'
 import { Coin } from '../type'
 
 const StyledInput = styled(Input)`
@@ -34,7 +35,7 @@ const AddAsset = () => {
 
   const { BaseImageUrl, Data } = coinList
 
-  const filteredData = sortBy(Object.values(Data as {}) as Coin[], 'FullName').filter((coin) =>
+  const filteredData = sortBy(Object.values(Data as {}) as Array<Coin>, 'FullName').filter((coin) =>
     [
       coin.FullName.toLowerCase(),
       coin.Name.toLowerCase(),
@@ -44,11 +45,11 @@ const AddAsset = () => {
   )
 
   return (
-    <StyledBaseContainer size={32} direction={'vertical'}>
+    <StyledBaseContainer size={32} direction="vertical">
       <StyledInput
-        placeholder={'Search'}
+        placeholder="Search"
         prefix={<SearchOutlined />}
-        size={'large'}
+        size="large"
         value={value}
         onChange={(e) => setValue(e.target.value)}
       />

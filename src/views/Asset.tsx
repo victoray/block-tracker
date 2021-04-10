@@ -1,9 +1,3 @@
-import React, { FC } from 'react'
-import { Button, Card, Space, Statistic, Typography } from 'antd'
-import styled from 'styled-components/macro'
-import { Link, RouteComponentProps } from 'react-router-dom'
-import { capitalize } from 'lodash'
-import { toAssetRoute } from '../constants/Routes'
 import {
   DeleteColumnOutlined,
   DeleteFilled,
@@ -12,13 +6,20 @@ import {
   MoreOutlined,
   PlusOutlined
 } from '@ant-design/icons'
+import { Button, Card, Space, Statistic, Typography } from 'antd'
 import { ColumnsType } from 'antd/lib/table'
-import { StyledBaseContainer, StyledCard, StyledTable } from '../components/styles'
-import Balance from '../components/Balance'
+import { capitalize } from 'lodash'
+import moment from 'moment'
+import React, { FC } from 'react'
 import { useQuery } from 'react-query'
+import { Link, RouteComponentProps } from 'react-router-dom'
+import styled from 'styled-components/macro'
+
 import { getAssets, getTransaction } from '../api'
 import { TransactionType } from '../api/types'
-import moment from 'moment'
+import Balance from '../components/Balance'
+import { StyledBaseContainer, StyledCard, StyledTable } from '../components/styles'
+import { toAssetRoute } from '../constants/Routes'
 
 const getTypeValue = (type: TransactionType) => {
   switch (type) {
@@ -43,8 +44,8 @@ const columns: ColumnsType<{}> = [
     width: 100,
     render: (_, record) => (
       <Space>
-        <Button icon={<EditFilled />} type={'link'} />
-        <Button icon={<DeleteFilled />} type={'link'} />
+        <Button icon={<EditFilled />} type="link" />
+        <Button icon={<DeleteFilled />} type="link" />
       </Space>
     )
   }
@@ -70,11 +71,11 @@ const Asset: FC<Props> = ({ match }) => {
   const { isLoading, data } = useQuery(`transaction-${match.params.asset}`, () => getTransaction(match.params.asset))
 
   return (
-    <StyledBaseContainer direction={'vertical'} size={32}>
+    <StyledBaseContainer direction="vertical" size={32}>
       <StyledTitleContainer>
-        <Space direction={'vertical'}>
+        <Space direction="vertical">
           <Typography.Title level={3}>Your Portfolio</Typography.Title>
-          <Typography.Text type={'secondary'}>Accurately tracking your crypto investments</Typography.Text>
+          <Typography.Text type="secondary">Accurately tracking your crypto investments</Typography.Text>
         </Space>
 
         <StyledButton type="primary">Add Transaction</StyledButton>

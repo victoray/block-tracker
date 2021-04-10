@@ -1,9 +1,11 @@
-import React, { FC } from 'react'
 import { Skeleton, Statistic, Tag } from 'antd'
-import { StyledCard } from './styles'
-import styled from 'styled-components/macro'
+import React, { FC } from 'react'
 import { useQuery } from 'react-query'
+import styled from 'styled-components/macro'
+
 import { getBalance } from '../api'
+
+import { StyledCard } from './styles'
 
 const StyledTag = styled(Tag)`
   margin-left: auto;

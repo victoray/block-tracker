@@ -1,4 +1,5 @@
 import axios from 'axios'
+
 import { Asset, Balance, Transaction } from './types'
 
 const BASE_URL = 'http://127.0.0.1:8000'
@@ -20,7 +21,7 @@ export const getTransaction = (assetId: string): Promise<Asset> => {
   return api.get(`/transactions/`, { params: { asset_id: assetId } })
 }
 
-export const getAssets = (): Promise<Asset[]> => {
+export const getAssets = (): Promise<Array<Asset>> => {
   return api.get('/assets/')
 }
 

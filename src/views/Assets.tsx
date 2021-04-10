@@ -1,16 +1,18 @@
-import { Button, Card, Radio, Space, Statistic, Table, Tag, Typography } from 'antd'
-import React from 'react'
-import styled from 'styled-components/macro'
+import { DeleteOutlined, PlusOutlined } from '@ant-design/icons'
+import { Button, Radio, Space, Typography } from 'antd'
 import { ColumnsType } from 'antd/lib/table'
-import AreaChart from '../components/AreaChart'
-import { Link, useHistory } from 'react-router-dom'
-import { Routes, toAssetRoute } from '../constants/Routes'
-import { DeleteOutlined, MoreOutlined, PlusOutlined } from '@ant-design/icons'
-import { StyledBaseContainer, StyledCard, StyledTable } from '../components/styles'
-import Balance from '../components/Balance'
+import React, { FC, useContext } from 'react'
 import { useQuery } from 'react-query'
+import { Link, useHistory } from 'react-router-dom'
+import styled from 'styled-components/macro'
+
+import AppContext from '../AppContext'
 import { getAssets } from '../api'
 import { Asset } from '../api/types'
+import AreaChart from '../components/AreaChart'
+import Balance from '../components/Balance'
+import { StyledBaseContainer, StyledTable } from '../components/styles'
+import { Routes, toAssetRoute } from '../constants/Routes'
 
 const StyledTitleContainer = styled.div`
   display: flex;
@@ -43,60 +45,60 @@ const formatter = new Intl.NumberFormat('en-US', {
   currency: 'USD'
 })
 
-const columns: ColumnsType<Asset> = [
-  {
-    title: 'Name',
-    dataIndex: 'name',
-    render: (name: string, record) => <Link to={toAssetRoute(record.id)}>{name}</Link>
-  },
-  {
-    title: 'Price',
-    dataIndex: 'price',
-    render: (price) => {
-      if (!isNaN(price)) {
-        return `$${Number(price).toFixed(2)}`
-      }
-
-      return '-'
-    }
-  },
-  {
-    title: 'Holdings',
-    dataIndex: 'amount',
-    render: (amount, asset) => (
-      <Space direction={'vertical'}>
-        <Typography.Text strong>
-          {!isNaN(Number(asset.price)) ? `${formatter.format(Number(asset.price) * amount)}` : '-'}
-        </Typography.Text>
-        <Typography.Text type={'secondary'}>
-          {amount} {asset.id}
-        </Typography.Text>
-      </Space>
-    )
-  },
-  {
-    title: '',
-    width: 100,
-    render: (_, asset) => (
-      <Space>
-        <Button icon={<PlusOutlined />} type={'link'} />
-        <Button icon={<DeleteOutlined />} type={'link'} />
-      </Space>
-    )
-  }
-]
-
-const Assets = () => {
+const Assets: FC = () => {
   const history = useHistory()
+  const { setCurrentCoin } = useContext(AppContext)
+  const { isLoading, data, refetch } = useQuery('assets', getAssets)
 
-  const { isLoading, data } = useQuery('assets', getAssets)
+  const columns: ColumnsType<Asset> = [
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      render: (name: string, record) => <Link to={toAssetRoute(record.id)}>{name}</Link>
+    },
+    {
+      title: 'Price',
+      dataIndex: 'price',
+      render: (price) => {
+        if (!isNaN(price)) {
+          return `$${Number(price).toFixed(2)}`
+        }
+
+        return '-'
+      }
+    },
+    {
+      title: 'Holdings',
+      dataIndex: 'amount',
+      render: (amount, asset) => (
+        <Space direction="vertical">
+          <Typography.Text strong>
+            {!isNaN(Number(asset.price)) ? `${formatter.format(Number(asset.price) * amount)}` : '-'}
+          </Typography.Text>
+          <Typography.Text type="secondary">
+            {amount} {asset.id}
+          </Typography.Text>
+        </Space>
+      )
+    },
+    {
+      title: '',
+      width: 100,
+      render: (_, asset) => (
+        <Space>
+          <Button icon={<PlusOutlined />} type="link" onClick={() => setCurrentCoin?.(asset.coin, refetch)} />
+          <Button icon={<DeleteOutlined />} type="link" />
+        </Space>
+      )
+    }
+  ]
 
   return (
-    <StyledBaseContainer direction={'vertical'} size={24}>
+    <StyledBaseContainer direction="vertical" size={24}>
       <StyledTitleContainer>
-        <Space direction={'vertical'}>
+        <Space direction="vertical">
           <Typography.Title level={3}>My Portfolio</Typography.Title>
-          <Typography.Text type={'secondary'}>Accurately tracking your crypto investments</Typography.Text>
+          <Typography.Text type="secondary">Accurately tracking your crypto investments</Typography.Text>
         </Space>
 
         <StyledButton type="primary" onClick={() => history.push(Routes.AddAsset)} icon={<PlusOutlined />}>

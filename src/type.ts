@@ -1,9 +1,9 @@
 export type AppProps = {
   modalOpen: boolean
-  toggleModal: () => void
+  toggleModal(): void
 
   currentCoin?: Coin
-  setCurrentCoin?: (coin: Coin) => void
+  setCurrentCoin?(coin: Coin, callbackFn?: () => void): void
 }
 
 export type Coin = {
