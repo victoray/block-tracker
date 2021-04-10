@@ -2,12 +2,12 @@ import { DeleteOutlined, PlusOutlined } from '@ant-design/icons'
 import { Button, Radio, Space, Typography } from 'antd'
 import { ColumnsType } from 'antd/lib/table'
 import React, { FC, useContext } from 'react'
-import { useQuery } from 'react-query'
+import { useMutation, useQuery } from 'react-query'
 import { Link, useHistory } from 'react-router-dom'
 import styled from 'styled-components/macro'
 
 import AppContext from '../AppContext'
-import { getAssets } from '../api'
+import { deleteAsset, getAssets } from '../api'
 import { Asset } from '../api/types'
 import AreaChart from '../components/AreaChart'
 import Balance from '../components/Balance'
@@ -49,6 +49,11 @@ const Assets: FC = () => {
   const history = useHistory()
   const { setCurrentCoin } = useContext(AppContext)
   const { isLoading, data, refetch } = useQuery('assets', getAssets)
+  const mutation = useMutation(deleteAsset, {
+    onSuccess: () => {
+      refetch()
+    }
+  })
 
   const columns: ColumnsType<Asset> = [
     {
@@ -87,7 +92,7 @@ const Assets: FC = () => {
       render: (_, asset) => (
         <Space>
           <Button icon={<PlusOutlined />} type="link" onClick={() => setCurrentCoin?.(asset.coin, refetch)} />
-          <Button icon={<DeleteOutlined />} type="link" />
+          <Button icon={<DeleteOutlined />} type="link" onClick={() => mutation.mutate(asset.id)} />
         </Space>
       )
     }
@@ -125,7 +130,7 @@ const Assets: FC = () => {
       <div>
         <Typography.Title level={3}>My assets</Typography.Title>
 
-        <StyledTable columns={columns as any} loading={isLoading} dataSource={data} pagination={false} />
+        <StyledTable columns={columns as any} loading={isLoading} dataSource={data} pagination={false} rowKey="id" />
       </div>
     </StyledBaseContainer>
   )

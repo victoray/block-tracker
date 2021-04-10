@@ -24,6 +24,9 @@ export const getTransaction = (assetId: string): Promise<Asset> => {
 export const getAssets = (): Promise<Array<Asset>> => {
   return api.get('/assets/')
 }
+export const deleteAsset = (assetId: string): Promise<void> => {
+  return api.delete(`/assets/${assetId}/`)
+}
 
 export const getCoinList = (): Promise<Record<string, unknown>> => {
   return api.get('/coin-list/')
