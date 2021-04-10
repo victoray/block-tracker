@@ -43,9 +43,9 @@ type MatchParams = {
 type Props = RouteComponentProps<MatchParams>
 
 const Asset: FC<Props> = ({ match }) => {
-  const { editTransaction } = useContext(AppContext)
+  const { editTransaction, setCurrentCoin } = useContext(AppContext)
 
-  const { isLoading, data, refetch } = useQuery(`transaction-${match.params.asset}`, () =>
+  const { isLoading, data, refetch } = useQuery(`transactions-${match.params.asset}`, () =>
     getTransactions(match.params.asset)
   )
 
@@ -73,6 +73,20 @@ const Asset: FC<Props> = ({ match }) => {
         </Space>
       )
     },
+    {
+      title: 'Profit/Loss',
+      dataIndex: 'pnl',
+      render: (pnl, transaction) => (
+        <Space direction="vertical">
+          <Typography.Text strong>{formatAmount(pnl)}</Typography.Text>
+          {transaction.pnlPercent && (
+            <Typography.Text type={transaction.pnlPercent > 0 ? 'success' : 'danger'}>
+              {transaction.pnlPercent.toFixed(2)} %
+            </Typography.Text>
+          )}
+        </Space>
+      )
+    },
     { title: 'Date', dataIndex: 'date', render: (date) => moment(date).format('DD-MM-YYYY') },
     {
       title: '',
@@ -94,7 +108,9 @@ const Asset: FC<Props> = ({ match }) => {
           <Typography.Text type="secondary">Accurately tracking your crypto investments</Typography.Text>
         </Space>
 
-        <StyledButton type="primary">Add Transaction</StyledButton>
+        <StyledButton type="primary" onClick={() => data && setCurrentCoin?.(data[0].coin, refetch)}>
+          Add Transaction
+        </StyledButton>
       </StyledTitleContainer>
 
       <Balance change={-24} value={300000} />
@@ -102,7 +118,7 @@ const Asset: FC<Props> = ({ match }) => {
       <div>
         <Typography.Title level={3}>{capitalize(match.params.asset)} Transactions</Typography.Title>
 
-        <StyledTable loading={isLoading} columns={columns as any} dataSource={data as any} pagination={false} />
+        <StyledTable loading={isLoading} columns={columns as any} dataSource={data} pagination={false} />
       </div>
     </StyledBaseContainer>
   )

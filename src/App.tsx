@@ -77,7 +77,7 @@ const TModal: FC<{ modalOpen: boolean; toggleModal(): void; coin?: Coin; transac
     }
   }
 
-  const getInitialValue = () => {
+  const getInitialValue = (): Record<string, unknown> => {
     if (transaction) {
       return {
         ...transaction,
@@ -141,6 +141,8 @@ const App: FC = () => {
   const toggleModal = useCallback(() => {
     setModalOpen((state) => !state)
     callback?.()
+    setTransaction(undefined)
+    setCoin(undefined)
   }, [callback])
 
   const handleSelectCoin = useCallback((coin_: Coin, callbackFn: () => void) => {

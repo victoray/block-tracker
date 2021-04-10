@@ -90,7 +90,6 @@
     "require-await": "warn",
     "init-declarations": "error",
     "no-shadow": "error",
-    "no-undefined": "error",
     "no-unused-vars": [
       "warn",
       {

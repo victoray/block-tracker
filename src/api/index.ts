@@ -25,7 +25,7 @@ export const deleteTransaction = (transactionId: string): Promise<void> => {
   return api.delete(`/transactions/${transactionId}/`)
 }
 
-export const getTransactions = (assetId: string): Promise<Asset> => {
+export const getTransactions = (assetId: string): Promise<Array<Transaction>> => {
   return api.get(`/transactions/`, { params: { asset_id: assetId } })
 }
 

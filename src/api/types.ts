@@ -11,6 +11,10 @@ export type Asset = {
   amount: number
   assetId: string
   coin: Coin
+  pnl?: number
+  pnlPercent?: number
+  currentValue?: number
+  originalValue?: number
 }
 
 export enum TransactionType {
@@ -26,4 +30,6 @@ export type Transaction = {
   amount: number
   assetId: string
   coin: Coin
+  pnl?: number
+  pnlPercent?: number
 }

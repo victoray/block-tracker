@@ -83,6 +83,20 @@ const Assets: FC = () => {
       )
     },
     {
+      title: 'Profit/Loss',
+      dataIndex: 'pnl',
+      render: (pnl, asset) => (
+        <Space direction="vertical">
+          <Typography.Text strong>{formatAmount(pnl)}</Typography.Text>
+          {asset.pnlPercent && (
+            <Typography.Text type={asset.pnlPercent > 0 ? 'success' : 'danger'}>
+              {asset.pnlPercent.toFixed(2)} %
+            </Typography.Text>
+          )}
+        </Space>
+      )
+    },
+    {
       title: '',
       width: 100,
       render: (_, asset) => (
