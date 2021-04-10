@@ -1,55 +1,30 @@
-import {
-  DeleteColumnOutlined,
-  DeleteFilled,
-  EditFilled,
-  EditOutlined,
-  MoreOutlined,
-  PlusOutlined
-} from '@ant-design/icons'
-import { Button, Card, Space, Statistic, Typography } from 'antd'
+import { DeleteFilled, EditFilled } from '@ant-design/icons'
+import { Button, Space, Typography } from 'antd'
 import { ColumnsType } from 'antd/lib/table'
 import { capitalize } from 'lodash'
 import moment from 'moment'
-import React, { FC } from 'react'
-import { useQuery } from 'react-query'
-import { Link, RouteComponentProps } from 'react-router-dom'
+import React, { FC, useContext } from 'react'
+import { useMutation, useQuery } from 'react-query'
+import { RouteComponentProps } from 'react-router-dom'
 import styled from 'styled-components/macro'
 
-import { getAssets, getTransaction } from '../api'
-import { TransactionType } from '../api/types'
+import AppContext from '../AppContext'
+import { deleteTransaction, getTransactions } from '../api'
+import { Transaction, TransactionType } from '../api/types'
 import Balance from '../components/Balance'
-import { StyledBaseContainer, StyledCard, StyledTable } from '../components/styles'
-import { toAssetRoute } from '../constants/Routes'
+import { StyledBaseContainer, StyledTable } from '../components/styles'
+import { formatAmount } from '../utils'
 
-const getTypeValue = (type: TransactionType) => {
+const getTypeValue = (type: TransactionType): string => {
   switch (type) {
     case TransactionType.ADD:
       return 'Add'
     case TransactionType.REMOVE:
       return 'Remove'
+    default:
+      return '-'
   }
 }
-const columns: ColumnsType<{}> = [
-  {
-    title: 'Type',
-    dataIndex: 'type',
-    render: getTypeValue
-  },
-  { title: 'Price', dataIndex: 'price' },
-  { title: 'Amount', dataIndex: 'amount' },
-  { title: 'Fees', dataIndex: 'fees' },
-  { title: 'Date', dataIndex: 'date', render: (date) => moment(date).format('DD-MM-YYYY') },
-  {
-    title: '',
-    width: 100,
-    render: (_, record) => (
-      <Space>
-        <Button icon={<EditFilled />} type="link" />
-        <Button icon={<DeleteFilled />} type="link" />
-      </Space>
-    )
-  }
-]
 
 const StyledTitleContainer = styled.div`
   display: flex;
@@ -68,7 +43,48 @@ type MatchParams = {
 type Props = RouteComponentProps<MatchParams>
 
 const Asset: FC<Props> = ({ match }) => {
-  const { isLoading, data } = useQuery(`transaction-${match.params.asset}`, () => getTransaction(match.params.asset))
+  const { editTransaction } = useContext(AppContext)
+
+  const { isLoading, data, refetch } = useQuery(`transaction-${match.params.asset}`, () =>
+    getTransactions(match.params.asset)
+  )
+
+  const removeTransaction = useMutation(deleteTransaction)
+
+  const columns: ColumnsType<Transaction> = [
+    {
+      title: 'Type',
+      dataIndex: 'type',
+      render: getTypeValue
+    },
+    { title: 'Price', dataIndex: 'price', render: formatAmount },
+    { title: 'Amount', dataIndex: 'amount' },
+    {
+      title: 'Total',
+      dataIndex: 'amount',
+      render: (amount, transaction) => (
+        <Space direction="vertical">
+          <Typography.Text strong>
+            {!isNaN(Number(transaction.price)) ? `${formatAmount(Number(transaction.price) * amount)}` : '-'}
+          </Typography.Text>
+          <Typography.Text type="secondary">
+            {amount} {transaction.assetId}
+          </Typography.Text>
+        </Space>
+      )
+    },
+    { title: 'Date', dataIndex: 'date', render: (date) => moment(date).format('DD-MM-YYYY') },
+    {
+      title: '',
+      width: 100,
+      render: (_, transaction) => (
+        <Space>
+          <Button icon={<EditFilled />} type="link" onClick={() => editTransaction?.(transaction, refetch)} />
+          <Button icon={<DeleteFilled />} type="link" />
+        </Space>
+      )
+    }
+  ]
 
   return (
     <StyledBaseContainer direction="vertical" size={32}>
@@ -86,7 +102,7 @@ const Asset: FC<Props> = ({ match }) => {
       <div>
         <Typography.Title level={3}>{capitalize(match.params.asset)} Transactions</Typography.Title>
 
-        <StyledTable loading={isLoading} columns={columns} dataSource={data as any} pagination={false} />
+        <StyledTable loading={isLoading} columns={columns as any} dataSource={data as any} pagination={false} />
       </div>
     </StyledBaseContainer>
   )

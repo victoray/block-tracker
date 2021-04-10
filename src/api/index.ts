@@ -4,7 +4,7 @@ import { Asset, Balance, Transaction } from './types'
 
 const BASE_URL = 'http://127.0.0.1:8000'
 const api = axios.create({
-  baseURL: 'http://127.0.0.1:8000'
+  baseURL: BASE_URL
 })
 
 api.interceptors.response.use((response) => response.data)
@@ -17,7 +17,15 @@ export const getAsset = (assetId: string): Promise<Asset> => {
   return api.get(`/assets/${assetId}/`)
 }
 
-export const getTransaction = (assetId: string): Promise<Asset> => {
+export const updateTransaction = (transactionId: string, transaction: Partial<Transaction>): Promise<void> => {
+  return api.put(`/transactions/${transactionId}/`, transaction)
+}
+
+export const deleteTransaction = (transactionId: string): Promise<void> => {
+  return api.delete(`/transactions/${transactionId}/`)
+}
+
+export const getTransactions = (assetId: string): Promise<Asset> => {
   return api.get(`/transactions/`, { params: { asset_id: assetId } })
 }
 

@@ -19,9 +19,11 @@ export enum TransactionType {
 }
 
 export type Transaction = {
+  id: string
   type: TransactionType
   date: string
   price: number
   amount: number
   assetId: string
+  coin: Coin
 }

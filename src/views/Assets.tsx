@@ -1,5 +1,5 @@
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons'
-import { Button, Radio, Space, Typography } from 'antd'
+import { Button, Popconfirm, Radio, Space, Typography } from 'antd'
 import { ColumnsType } from 'antd/lib/table'
 import React, { FC, useContext } from 'react'
 import { useMutation, useQuery } from 'react-query'
@@ -13,6 +13,7 @@ import AreaChart from '../components/AreaChart'
 import Balance from '../components/Balance'
 import { StyledBaseContainer, StyledTable } from '../components/styles'
 import { Routes, toAssetRoute } from '../constants/Routes'
+import { formatAmount } from '../utils'
 
 const StyledTitleContainer = styled.div`
   display: flex;
@@ -39,11 +40,6 @@ const StyledRadioGroup = styled(Radio.Group)`
   float: right;
   margin-right: 40px;
 `
-
-const formatter = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD'
-})
 
 const Assets: FC = () => {
   const history = useHistory()
@@ -78,7 +74,7 @@ const Assets: FC = () => {
       render: (amount, asset) => (
         <Space direction="vertical">
           <Typography.Text strong>
-            {!isNaN(Number(asset.price)) ? `${formatter.format(Number(asset.price) * amount)}` : '-'}
+            {!isNaN(Number(asset.price)) ? `${formatAmount(Number(asset.price) * amount)}` : '-'}
           </Typography.Text>
           <Typography.Text type="secondary">
             {amount} {asset.id}
@@ -92,7 +88,14 @@ const Assets: FC = () => {
       render: (_, asset) => (
         <Space>
           <Button icon={<PlusOutlined />} type="link" onClick={() => setCurrentCoin?.(asset.coin, refetch)} />
-          <Button icon={<DeleteOutlined />} type="link" onClick={() => mutation.mutate(asset.id)} />
+          <Popconfirm
+            title="Are you sure to delete this asset?"
+            onConfirm={() => mutation.mutate(asset.id)}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button icon={<DeleteOutlined />} type="link" />
+          </Popconfirm>
         </Space>
       )
     }

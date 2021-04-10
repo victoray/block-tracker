@@ -1,7 +1,7 @@
 import { SearchOutlined } from '@ant-design/icons'
-import { Input, List, Typography } from 'antd'
+import { Input, List } from 'antd'
 import { sortBy } from 'lodash'
-import React, { useContext, useState } from 'react'
+import React, { FC, useContext, useState } from 'react'
 import { useQuery } from 'react-query'
 import styled from 'styled-components/macro'
 
@@ -24,7 +24,7 @@ const StyledImage = styled.img`
   margin-right: 10px;
 `
 
-const AddAsset = () => {
+const AddAsset: FC = () => {
   const { setCurrentCoin } = useContext(AppContext)
   const { data: coinList } = useQuery('coinList', getCoinList)
   const [value, setValue] = useState('')
@@ -35,7 +35,7 @@ const AddAsset = () => {
 
   const { BaseImageUrl, Data } = coinList
 
-  const filteredData = sortBy(Object.values(Data as {}) as Array<Coin>, 'FullName').filter((coin) =>
+  const filteredData = sortBy(Object.values(Data as Record<string, any>) as Array<Coin>, 'FullName').filter((coin) =>
     [
       coin.FullName.toLowerCase(),
       coin.Name.toLowerCase(),
