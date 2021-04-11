@@ -11,14 +11,18 @@ const StyledTag = styled(Tag)`
   margin-left: auto;
 `
 
-const Balance: FC<{ value: number; change: number }> = () => {
-  const { isLoading, data } = useQuery('getBalance', () => getBalance())
+const Balance: FC<{ assetId?: string }> = ({ assetId }) => {
+  const { isLoading, data } = useQuery('getBalance', () => getBalance(assetId), {
+    refetchInterval: 5000
+  })
 
   return (
     <StyledCard>
       <Skeleton loading={isLoading}>
         <Statistic title="Current Balance (USD)" value={data?.amount} precision={2} />
-        <StyledTag color="#cd201f">{data?.change}%</StyledTag>
+        {data?.change !== undefined && (
+          <StyledTag color={data.change > 0 ? 'success' : '#cd201f'}>{data.change.toFixed(2)}%</StyledTag>
+        )}
       </Skeleton>
     </StyledCard>
   )

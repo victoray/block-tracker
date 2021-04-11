@@ -1,6 +1,7 @@
 import { Button, DatePicker, Form, InputNumber, Modal, Select, Typography } from 'antd'
+import firebase from 'firebase'
 import moment from 'moment'
-import React, { FC, useCallback, useState } from 'react'
+import React, { FC, useCallback, useEffect, useState } from 'react'
 import './App.less'
 import { unstable_batchedUpdates } from 'react-dom'
 import { useMutation } from 'react-query'
@@ -9,12 +10,15 @@ import styled from 'styled-components/macro'
 
 import { createTransaction, updateTransaction } from './api'
 import { Transaction } from './api/types'
+import { FIREBASE_APP } from './constants/Firebase'
 import { Routes } from './constants/Routes'
 import { Coin } from './type'
 import AddAsset from './views/AddAsset'
 import Asset from './views/Asset'
 import Assets from './views/Assets'
 import Settings from './views/Settings'
+
+import './firebaseConfig'
 
 import AppContext from 'AppContext'
 
@@ -160,6 +164,20 @@ const App: FC = () => {
       setCallback(() => callbackFn)
     })
   }, [])
+
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+
+  useEffect(() => {
+    const app = firebase.app(FIREBASE_APP)
+    firebase
+      .auth(app)
+      .signInAnonymously()
+      .then(() => setIsAuthenticated(true))
+  }, [])
+
+  if (!isAuthenticated) {
+    return null
+  }
 
   return (
     <AppContext.Provider

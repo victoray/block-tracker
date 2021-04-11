@@ -44,7 +44,9 @@ const StyledRadioGroup = styled(Radio.Group)`
 const Assets: FC = () => {
   const history = useHistory()
   const { setCurrentCoin } = useContext(AppContext)
-  const { isLoading, data, refetch } = useQuery('assets', getAssets)
+  const { isLoading, data, refetch } = useQuery('assets', getAssets, {
+    refetchInterval: 5000
+  })
   const mutation = useMutation(deleteAsset, {
     onSuccess: () => {
       refetch()
@@ -128,7 +130,7 @@ const Assets: FC = () => {
         </StyledButton>
       </StyledTitleContainer>
 
-      <Balance change={-24} value={300000} />
+      <Balance />
 
       <StyledChartContainer>
         <StyledChartWrapper>

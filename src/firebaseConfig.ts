@@ -1,4 +1,4 @@
-import * as firebase from 'firebase'
+import firebase from 'firebase'
 
 import 'firebase/auth'
 import { FIREBASE_APP } from './constants/Firebase'
@@ -14,7 +14,7 @@ const firebaseConfig = {
   measurementId: 'G-2B914Y556J'
 }
 
-if (!firebase) {
+if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig, FIREBASE_APP)
 } else {
   firebase.app(FIREBASE_APP)

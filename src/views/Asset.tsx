@@ -1,11 +1,11 @@
 import { DeleteFilled, EditFilled } from '@ant-design/icons'
-import { Button, Space, Typography } from 'antd'
+import { Button, Popconfirm, Space, Typography } from 'antd'
 import { ColumnsType } from 'antd/lib/table'
 import { capitalize } from 'lodash'
 import moment from 'moment'
 import React, { FC, useContext } from 'react'
 import { useMutation, useQuery } from 'react-query'
-import { RouteComponentProps } from 'react-router-dom'
+import { RouteComponentProps, useHistory } from 'react-router-dom'
 import styled from 'styled-components/macro'
 
 import AppContext from '../AppContext'
@@ -13,6 +13,7 @@ import { deleteTransaction, getTransactions } from '../api'
 import { Transaction, TransactionType } from '../api/types'
 import Balance from '../components/Balance'
 import { StyledBaseContainer, StyledTable } from '../components/styles'
+import { Routes } from '../constants/Routes'
 import { formatAmount } from '../utils'
 
 const getTypeValue = (type: TransactionType): string => {
@@ -43,13 +44,26 @@ type MatchParams = {
 type Props = RouteComponentProps<MatchParams>
 
 const Asset: FC<Props> = ({ match }) => {
+  const history = useHistory()
   const { editTransaction, setCurrentCoin } = useContext(AppContext)
 
-  const { isLoading, data, refetch } = useQuery(`transactions-${match.params.asset}`, () =>
-    getTransactions(match.params.asset)
+  const { isLoading, data, refetch } = useQuery(
+    `transactions-${match.params.asset}`,
+    () => getTransactions(match.params.asset),
+    {
+      onSuccess: (transactions) => {
+        if (!transactions.length) {
+          history.push(Routes.Assets)
+        }
+      }
+    }
   )
 
-  const removeTransaction = useMutation(deleteTransaction)
+  const removeTransaction = useMutation(deleteTransaction, {
+    onSuccess: () => {
+      refetch()
+    }
+  })
 
   const columns: ColumnsType<Transaction> = [
     {
@@ -94,7 +108,14 @@ const Asset: FC<Props> = ({ match }) => {
       render: (_, transaction) => (
         <Space>
           <Button icon={<EditFilled />} type="link" onClick={() => editTransaction?.(transaction, refetch)} />
-          <Button icon={<DeleteFilled />} type="link" />
+          <Popconfirm
+            title="Are you sure to delete this asset?"
+            onConfirm={() => removeTransaction.mutate(transaction.id)}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button icon={<DeleteFilled />} type="link" />
+          </Popconfirm>
         </Space>
       )
     }
@@ -113,7 +134,7 @@ const Asset: FC<Props> = ({ match }) => {
         </StyledButton>
       </StyledTitleContainer>
 
-      <Balance change={-24} value={300000} />
+      <Balance assetId={match.params.asset} />
 
       <div>
         <Typography.Title level={3}>{capitalize(match.params.asset)} Transactions</Typography.Title>

@@ -1,4 +1,7 @@
 import axios from 'axios'
+import firebase from 'firebase'
+
+import { FIREBASE_APP } from '../constants/Firebase'
 
 import { Asset, Balance, Transaction } from './types'
 
@@ -8,9 +11,16 @@ const api = axios.create({
 })
 
 api.interceptors.response.use((response) => response.data)
+api.interceptors.request.use(async (request) => {
+  const app = firebase.app(FIREBASE_APP)
+  const token = await firebase.auth(app).currentUser?.getIdToken()
+  request.headers.Authorization = `Bearer ${token || ''}`
 
-export const getBalance = (): Promise<Balance> => {
-  return api.get('/balance/')
+  return request
+})
+
+export const getBalance = (assetId?: string): Promise<Balance> => {
+  return api.get('/balance/', { params: { assetId } })
 }
 
 export const getAsset = (assetId: string): Promise<Asset> => {
