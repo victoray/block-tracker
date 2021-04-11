@@ -78,12 +78,14 @@ export const updateSettings = (data = {}): Promise<AppSettings> => {
   return api.post('/settings/', data)
 }
 
-export const getNews = (assets: Array<string>): Promise<CryptoNews> => {
-  return axios.get('https://cryptonews-api.com/api/v1', {
-    params: {
-      items: 20,
-      tickers: assets.join(','),
-      token: CRYPTO_NEWS_API_KEY
-    }
-  })
+export const getNews = (assets: Array<string>): Promise<Array<CryptoNews>> => {
+  return axios
+    .get('https://cryptonews-api.com/api/v1', {
+      params: {
+        items: 20,
+        tickers: assets.join(','),
+        token: CRYPTO_NEWS_API_KEY
+      }
+    })
+    .then((r) => r.data?.data)
 }

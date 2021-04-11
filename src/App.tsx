@@ -34,9 +34,12 @@ const StyledHeader = styled.div`
   padding: 30px;
 `
 
+const StyledSpace = styled(Space)`
+  margin-left: auto;
+`
+
 const StyledButton = styled(Button)`
   border-radius: 16px;
-  margin-left: auto;
 `
 
 const Header: FC = () => {
@@ -46,14 +49,14 @@ const Header: FC = () => {
     <StyledHeader>
       <Link to={Routes.Assets}>Block Tracker</Link>
 
-      <Space>
+      <StyledSpace>
         <StyledButton type="primary" onClick={() => history.push(Routes.News)}>
           Crypto News
         </StyledButton>
         <StyledButton type="primary" onClick={() => history.push(Routes.Settings)}>
           Settings
         </StyledButton>
-      </Space>
+      </StyledSpace>
     </StyledHeader>
   )
 }
