@@ -55,11 +55,15 @@ export const createTransaction = (transaction: Transaction): Promise<any> => {
   return api.post('/transactions/', transaction)
 }
 
-export const getSeries = (): Promise<Array<Series>> => {
-  return api.get('/series/').then((series) => {
-    return ((series as unknown) as Array<Series>).map((data) => ({
-      ...data,
-      date: moment(data.date).format('DD-MM-YYYY HH:mm')
-    }))
-  })
+export const getSeries = (params = {}): Promise<Array<Series>> => {
+  return api
+    .get('/series/', {
+      params
+    })
+    .then((series) => {
+      return ((series as unknown) as Array<Series>).map((data) => ({
+        ...data,
+        date: moment(data.date).format('DD-MM-YYYY HH:mm')
+      }))
+    })
 }

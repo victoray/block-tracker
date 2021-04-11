@@ -1,7 +1,8 @@
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons'
 import { Button, Popconfirm, Radio, Space, Typography } from 'antd'
 import { ColumnsType } from 'antd/lib/table'
-import React, { FC, useContext } from 'react'
+import moment, { Moment } from 'moment'
+import React, { FC, useContext, useMemo, useState } from 'react'
 import { useMutation, useQuery } from 'react-query'
 import { Link, useHistory } from 'react-router-dom'
 import styled from 'styled-components/macro'
@@ -41,9 +42,37 @@ const StyledRadioGroup = styled(Radio.Group)`
   margin-right: 40px;
 `
 
+enum Period {
+  all = 'all',
+  oneHour = '1h',
+  twelveHours = '12h',
+  oneDay = '1d',
+  oneWeek = '1w',
+  oneMonth = '1m',
+  oneYear = '1y'
+}
+
+const getPeriod = (period: Period): [Moment, Moment] => {
+  const timeMapping: Record<Period, [Moment, Moment]> = {
+    [Period.all]: [moment().subtract(2, 'years'), moment()],
+    [Period.oneHour]: [moment().subtract(1, 'hour'), moment()],
+    [Period.twelveHours]: [moment().subtract(12, 'hours'), moment()],
+    [Period.oneDay]: [moment().subtract(1, 'day'), moment()],
+    [Period.oneWeek]: [moment().subtract(1, 'week'), moment()],
+    [Period.oneMonth]: [moment().subtract(1, 'month'), moment()],
+    [Period.oneYear]: [moment().subtract(1, 'year'), moment()]
+  }
+
+  return timeMapping[period]
+}
+
 const Assets: FC = () => {
   const history = useHistory()
   const { setCurrentCoin } = useContext(AppContext)
+  const [currentPeriod, setCurrentPeriod] = useState<Period>(Period.all)
+
+  const period = useMemo(() => getPeriod(currentPeriod), [currentPeriod])
+
   const { isLoading, data, refetch } = useQuery('assets', getAssets, {
     refetchInterval: 5000
   })
@@ -134,15 +163,20 @@ const Assets: FC = () => {
 
       <StyledChartContainer>
         <StyledChartWrapper>
-          <AreaChart />
+          <AreaChart period={period} />
         </StyledChartWrapper>
 
-        <StyledRadioGroup defaultValue="1h" buttonStyle="solid">
-          <Radio.Button value="1h">1H</Radio.Button>
-          <Radio.Button value="12h">12H</Radio.Button>
-          <Radio.Button value="1d">1D</Radio.Button>
-          <Radio.Button value="1w">1W</Radio.Button>
-          <Radio.Button value="1m">1M</Radio.Button>
+        <StyledRadioGroup
+          defaultValue={Period.all}
+          buttonStyle="solid"
+          onChange={(e) => setCurrentPeriod(e.target.value)}
+        >
+          <Radio.Button value={Period.oneHour}>1H</Radio.Button>
+          <Radio.Button value={Period.twelveHours}>12H</Radio.Button>
+          <Radio.Button value={Period.oneDay}>1D</Radio.Button>
+          <Radio.Button value={Period.oneWeek}>1W</Radio.Button>
+          <Radio.Button value={Period.oneMonth}>1M</Radio.Button>
+          <Radio.Button value={Period.all}>All</Radio.Button>
         </StyledRadioGroup>
       </StyledChartContainer>
 
