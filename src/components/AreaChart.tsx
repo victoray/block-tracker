@@ -1,22 +1,27 @@
 import { Area } from '@ant-design/charts'
 import { AreaOptions as G2plotProps } from '@antv/g2plot'
 import { isEqual } from 'lodash'
-import { Moment } from 'moment'
 import React, { memo, useState } from 'react'
 import { useQuery } from 'react-query'
 
 import { getSeries } from '../api'
 import { Series } from '../api/types'
+import { getPeriod, Period } from '../utils'
 
 import Loader from './Loader'
 
-const AreaChart: React.FC<{ period: [Moment, Moment] }> = ({ period: [start, end] }) => {
+const AreaChart: React.FC<{ period: Period }> = ({ period }) => {
   const [series, setSeries] = useState<Array<Series>>([])
   const [fetched, setFetched] = useState(false)
-  const [periodStart, periodEnd] = [start.toISOString(), end.toISOString()]
+
   const { isLoading } = useQuery(
-    [`series-${periodStart}-${periodEnd}`, { gte: periodStart, lte: periodEnd }],
-    (context) => getSeries(context.queryKey[1]),
+    [`series-${period}`, period],
+    (context) => {
+      const [start, end] = getPeriod(context.queryKey[1] as Period)
+      const [periodStart, periodEnd] = [start.toISOString(), end.toISOString()]
+
+      return getSeries({ gte: periodStart, lte: periodEnd })
+    },
     {
       refetchInterval: 5000,
       onSuccess: (data) => {
@@ -58,9 +63,4 @@ const AreaChart: React.FC<{ period: [Moment, Moment] }> = ({ period: [start, end
   return <Area {...config} />
 }
 
-export default memo(AreaChart, (props, nextProps) => {
-  const prevPeriod = props.period.map((p) => p.toISOString())
-  const nextPeriod = nextProps.period.map((p) => p.toISOString())
-
-  return isEqual(prevPeriod, nextPeriod)
-})
+export default memo(AreaChart, isEqual)
