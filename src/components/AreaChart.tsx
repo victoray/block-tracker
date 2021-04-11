@@ -2,28 +2,31 @@ import { Area } from '@ant-design/charts'
 import { AreaOptions as G2plotProps } from '@antv/g2plot'
 import { isEqual } from 'lodash'
 import { Moment } from 'moment'
-import React, { memo } from 'react'
+import React, { memo, useState } from 'react'
 import { useQuery } from 'react-query'
 
 import { getSeries } from '../api'
+import { Series } from '../api/types'
 
 import Loader from './Loader'
 
 const AreaChart: React.FC<{ period: [Moment, Moment] }> = ({ period: [start, end] }) => {
+  const [series, setSeries] = useState<Array<Series>>([])
   const [periodStart, periodEnd] = [start.toISOString(), end.toISOString()]
-  const { data: series, isLoading, refetch } = useQuery(
+  const { isLoading, refetch } = useQuery(
     [`series-${periodStart}-${periodEnd}`, { gte: periodStart, lte: periodEnd }],
     (context) => getSeries(context.queryKey[1]),
     {
-      refetchInterval: 5000
+      refetchInterval: 5000,
+      onSuccess: (data) => setSeries(data)
     }
   )
-  if (!series || isLoading) {
+  if (!series.length && isLoading) {
     return <Loader />
   }
 
-  const min = Math.max(Math.min(...series.map((s) => s.balance)) - 10000, 0)
-  const max = Math.max(...series.map((s) => s.balance)) + 10000
+  const min = Math.min(...series.map((s) => s.balance)) * 0.95
+  const max = Math.max(...series.map((s) => s.balance)) * 1.05
 
   const config: G2plotProps = {
     data: series,
@@ -39,7 +42,6 @@ const AreaChart: React.FC<{ period: [Moment, Moment] }> = ({ period: [start, end
     },
     yAxis: {
       grid: null,
-      tickCount: 5,
       min,
       max
     },

@@ -2,7 +2,7 @@ import { DeleteOutlined, PlusOutlined } from '@ant-design/icons'
 import { Button, notification, Popconfirm, Radio, Space, Typography } from 'antd'
 import { ColumnsType } from 'antd/lib/table'
 import moment, { Moment } from 'moment'
-import React, { FC, useContext, useMemo, useState } from 'react'
+import React, { FC, useContext, useState } from 'react'
 import { useMutation, useQuery } from 'react-query'
 import { Link, useHistory } from 'react-router-dom'
 import styled from 'styled-components/macro'
@@ -71,10 +71,8 @@ const Assets: FC = () => {
   const { setCurrentCoin } = useContext(AppContext)
   const [currentPeriod, setCurrentPeriod] = useState<Period>(Period.all)
 
-  const period = useMemo(() => getPeriod(currentPeriod), [currentPeriod])
-
   const { isLoading, data, refetch } = useQuery('assets', getAssets, {
-    refetchInterval: 5000
+    refetchInterval: 1000
   })
   const mutation = useMutation(deleteAsset, {
     onSuccess: () => {
@@ -166,7 +164,7 @@ const Assets: FC = () => {
 
       <StyledChartContainer>
         <StyledChartWrapper>
-          <AreaChart period={period} />
+          <AreaChart period={getPeriod(currentPeriod)} />
         </StyledChartWrapper>
 
         <StyledRadioGroup
@@ -179,6 +177,7 @@ const Assets: FC = () => {
           <Radio.Button value={Period.oneDay}>1D</Radio.Button>
           <Radio.Button value={Period.oneWeek}>1W</Radio.Button>
           <Radio.Button value={Period.oneMonth}>1M</Radio.Button>
+          <Radio.Button value={Period.oneYear}>1Y</Radio.Button>
           <Radio.Button value={Period.all}>All</Radio.Button>
         </StyledRadioGroup>
       </StyledChartContainer>

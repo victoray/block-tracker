@@ -4,7 +4,7 @@ import moment from 'moment'
 
 import { FIREBASE_APP } from '../constants/Firebase'
 
-import { Asset, Balance, Series, Transaction } from './types'
+import { AppSettings, Asset, Balance, Series, Transaction } from './types'
 
 const BASE_URL = 'http://127.0.0.1:8000'
 const api = axios.create({
@@ -63,7 +63,16 @@ export const getSeries = (params = {}): Promise<Array<Series>> => {
     .then((series) => {
       return ((series as unknown) as Array<Series>).map((data) => ({
         ...data,
+        balance: Number(data.balance.toFixed(2)),
         date: moment(data.date).format('DD-MM-YYYY HH:mm')
       }))
     })
+}
+
+export const getSettings = (): Promise<AppSettings> => {
+  return api.get('/settings/')
+}
+
+export const updateSettings = (data = {}): Promise<AppSettings> => {
+  return api.post('/settings/', data)
 }

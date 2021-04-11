@@ -40,3 +40,8 @@ export type Series = {
   userId: string
   balance: number
 }
+
+export type AppSettings = {
+  allowNotifications: boolean
+  email?: string
+}
