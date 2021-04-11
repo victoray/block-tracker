@@ -12,16 +12,20 @@ import Loader from './Loader'
 
 const AreaChart: React.FC<{ period: [Moment, Moment] }> = ({ period: [start, end] }) => {
   const [series, setSeries] = useState<Array<Series>>([])
+  const [fetched, setFetched] = useState(false)
   const [periodStart, periodEnd] = [start.toISOString(), end.toISOString()]
-  const { isLoading, refetch } = useQuery(
+  const { isLoading } = useQuery(
     [`series-${periodStart}-${periodEnd}`, { gte: periodStart, lte: periodEnd }],
     (context) => getSeries(context.queryKey[1]),
     {
       refetchInterval: 5000,
-      onSuccess: (data) => setSeries(data)
+      onSuccess: (data) => {
+        setSeries(data)
+        setFetched(true)
+      }
     }
   )
-  if (!series.length && isLoading) {
+  if (!fetched && isLoading) {
     return <Loader />
   }
 
