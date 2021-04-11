@@ -4,9 +4,10 @@ import moment from 'moment'
 
 import { FIREBASE_APP } from '../constants/Firebase'
 
-import { AppSettings, Asset, Balance, Series, Transaction } from './types'
+import { AppSettings, Asset, Balance, CryptoNews, Series, Transaction } from './types'
 
-const BASE_URL = process.env.API_URL || 'http://127.0.0.1:8000'
+const BASE_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8000'
+const CRYPTO_NEWS_API_KEY = process.env.REACT_APP_CRYPTO_NEWS_API_KEY || 'wvmbedjsa1pucmfct8pkpo8swss0v5n02oniywly'
 const api = axios.create({
   baseURL: BASE_URL
 })
@@ -75,4 +76,14 @@ export const getSettings = (): Promise<AppSettings> => {
 
 export const updateSettings = (data = {}): Promise<AppSettings> => {
   return api.post('/settings/', data)
+}
+
+export const getNews = (assets: Array<string>): Promise<CryptoNews> => {
+  return axios.get('https://cryptonews-api.com/api/v1', {
+    params: {
+      items: 20,
+      tickers: assets.join(','),
+      token: CRYPTO_NEWS_API_KEY
+    }
+  })
 }

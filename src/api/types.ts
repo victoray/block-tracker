@@ -45,3 +45,16 @@ export type AppSettings = {
   allowNotifications: boolean
   email?: string
 }
+
+export type CryptoNews = {
+  news_url: string
+  image_url: string
+  title: string
+  text: string
+  source_name: string
+  date: string
+  topics: Array<string>
+  sentiment: string
+  type: string
+  tickers: Array<string>
+}

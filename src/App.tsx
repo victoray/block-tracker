@@ -1,4 +1,4 @@
-import { Button, DatePicker, Form, InputNumber, Modal, notification, Select, Typography } from 'antd'
+import { Button, DatePicker, Form, InputNumber, Modal, notification, Select, Space, Typography } from 'antd'
 import firebase from 'firebase'
 import moment from 'moment'
 import React, { FC, useCallback, useEffect, useState } from 'react'
@@ -22,6 +22,8 @@ import './firebaseConfig'
 
 import AppContext from 'AppContext'
 
+import News from './views/News'
+
 const StyledHeader = styled.div`
   height: 64px;
   border-bottom: 1px solid #303030;
@@ -44,9 +46,14 @@ const Header: FC = () => {
     <StyledHeader>
       <Link to={Routes.Assets}>Block Tracker</Link>
 
-      <StyledButton type="primary" onClick={() => history.push(Routes.Settings)}>
-        Settings
-      </StyledButton>
+      <Space>
+        <StyledButton type="primary" onClick={() => history.push(Routes.News)}>
+          Crypto News
+        </StyledButton>
+        <StyledButton type="primary" onClick={() => history.push(Routes.Settings)}>
+          Settings
+        </StyledButton>
+      </Space>
     </StyledHeader>
   )
 }
@@ -206,6 +213,7 @@ const App: FC = () => {
           <Route path={Routes.AddAsset} exact component={AddAsset} />
           <Route path={Routes.Asset} exact component={Asset} />
           <Route path={Routes.Settings} exact component={Settings} />
+          <Route path={Routes.News} exact component={News} />
           <Route component={Assets} />
         </Switch>
       </Router>
