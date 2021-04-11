@@ -6,7 +6,7 @@ import { FIREBASE_APP } from '../constants/Firebase'
 
 import { AppSettings, Asset, Balance, Series, Transaction } from './types'
 
-const BASE_URL = 'http://127.0.0.1:8000'
+const BASE_URL = process.env.API_URL || 'http://127.0.0.1:8000'
 const api = axios.create({
   baseURL: BASE_URL
 })
