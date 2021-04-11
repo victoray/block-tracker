@@ -1,51 +1,28 @@
 import { Area } from '@ant-design/charts'
 import { AreaOptions as G2plotProps } from '@antv/g2plot'
-import React from 'react'
+import React, { memo } from 'react'
+import { useQuery } from 'react-query'
+
+import { getSeries } from '../api'
+
+import Loader from './Loader'
 
 const AreaChart: React.FC = () => {
-  const data = [
-    {
-      year: '1991',
-      value: 3
-    },
-    {
-      year: '1992',
-      value: 4
-    },
-    {
-      year: '1993',
-      value: 3.5
-    },
-    {
-      year: '1994',
-      value: 5
-    },
-    {
-      year: '1995',
-      value: 4.9
-    },
-    {
-      year: '1996',
-      value: 6
-    },
-    {
-      year: '1997',
-      value: 7
-    },
-    {
-      year: '1998',
-      value: 9
-    },
-    {
-      year: '1999',
-      value: 13
-    }
-  ]
+  const { data: series, isLoading } = useQuery('series', getSeries, {
+    refetchInterval: 5000
+  })
+
+  if (!series || isLoading) {
+    return <Loader />
+  }
+
+  const min = Math.min(...series.map((s) => s.balance)) - 10000
+  const max = Math.max(...series.map((s) => s.balance)) + 10000
 
   const config: G2plotProps = {
-    data,
-    yField: 'value',
-    xField: 'year',
+    data: series,
+    yField: 'balance',
+    xField: 'date',
     line: {
       size: 0.5,
       color: '#1da57a'
@@ -56,8 +33,11 @@ const AreaChart: React.FC = () => {
     },
     yAxis: {
       grid: null,
-      tickCount: 5
+      tickCount: 5,
+      min,
+      max
     },
+    animation: false,
     areaStyle: function areaStyle() {
       return { fill: 'rgba(29, 165, 122, 0.4)' }
     }
@@ -66,4 +46,4 @@ const AreaChart: React.FC = () => {
   return <Area {...config} />
 }
 
-export default AreaChart
+export default memo(AreaChart, () => true)

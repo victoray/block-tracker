@@ -1,5 +1,5 @@
 import { SearchOutlined } from '@ant-design/icons'
-import { Input, List, Row, Spin } from 'antd'
+import { Input, List } from 'antd'
 import { sortBy } from 'lodash'
 import React, { FC, useContext, useState } from 'react'
 import { useQuery } from 'react-query'
@@ -7,6 +7,7 @@ import styled from 'styled-components/macro'
 
 import AppContext from '../AppContext'
 import { getCoinList } from '../api'
+import Loader from '../components/Loader'
 import { StyledBaseContainer } from '../components/styles'
 import { Coin } from '../type'
 
@@ -23,18 +24,6 @@ const StyledImage = styled.img`
   width: 24px;
   margin-right: 10px;
 `
-
-const StyledRow = styled(Row)`
-  padding: 50px;
-`
-
-const Loader: FC = () => {
-  return (
-    <StyledRow justify="center">
-      <Spin size="large" />
-    </StyledRow>
-  )
-}
 
 const AddAsset: FC = () => {
   const { setCurrentCoin } = useContext(AppContext)

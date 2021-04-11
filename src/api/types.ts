@@ -33,3 +33,10 @@ export type Transaction = {
   pnl?: number
   pnlPercent?: number
 }
+
+export type Series = {
+  date: string
+  id: string
+  userId: string
+  balance: number
+}
