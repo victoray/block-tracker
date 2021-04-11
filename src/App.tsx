@@ -1,4 +1,4 @@
-import { Button, DatePicker, Form, InputNumber, Modal, Select, Typography } from 'antd'
+import { Button, DatePicker, Form, InputNumber, Modal, notification, Select, Typography } from 'antd'
 import firebase from 'firebase'
 import moment from 'moment'
 import React, { FC, useCallback, useEffect, useState } from 'react'
@@ -63,12 +63,22 @@ const TModal: FC<{ modalOpen: boolean; toggleModal(): void; coin?: Coin; transac
 }) => {
   const currentCoin = transaction?.coin || coin
   const createTransactionMutation = useMutation(createTransaction, {
-    onSuccess: toggleModal
+    onSuccess: () => {
+      notification.success({
+        message: 'Transaction Added Successfully'
+      })
+      toggleModal()
+    }
   })
   const editTransaction = useMutation(
     (data: Partial<Transaction>) => updateTransaction(String(transaction?.id), data),
     {
-      onSuccess: toggleModal
+      onSuccess: () => {
+        notification.success({
+          message: 'Transaction Updated Successfully'
+        })
+        toggleModal()
+      }
     }
   )
 

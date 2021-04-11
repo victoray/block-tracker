@@ -1,5 +1,5 @@
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons'
-import { Button, Popconfirm, Radio, Space, Typography } from 'antd'
+import { Button, notification, Popconfirm, Radio, Space, Typography } from 'antd'
 import { ColumnsType } from 'antd/lib/table'
 import moment, { Moment } from 'moment'
 import React, { FC, useContext, useMemo, useState } from 'react'
@@ -78,6 +78,9 @@ const Assets: FC = () => {
   })
   const mutation = useMutation(deleteAsset, {
     onSuccess: () => {
+      notification.success({
+        message: 'Asset has been removed'
+      })
       refetch()
     }
   })

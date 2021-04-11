@@ -13,7 +13,7 @@ const StyledTag = styled(Tag)`
 
 const Balance: FC<{ assetId?: string }> = ({ assetId }) => {
   const { isLoading, data } = useQuery('getBalance', () => getBalance(assetId), {
-    refetchInterval: 5000
+    refetchInterval: 1000
   })
 
   return (

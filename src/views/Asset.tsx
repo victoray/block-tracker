@@ -1,5 +1,5 @@
 import { DeleteFilled, EditFilled } from '@ant-design/icons'
-import { Button, Popconfirm, Space, Typography } from 'antd'
+import { Button, notification, Popconfirm, Space, Typography } from 'antd'
 import { ColumnsType } from 'antd/lib/table'
 import { capitalize } from 'lodash'
 import moment from 'moment'
@@ -61,6 +61,9 @@ const Asset: FC<Props> = ({ match }) => {
 
   const removeTransaction = useMutation(deleteTransaction, {
     onSuccess: () => {
+      notification.success({
+        message: 'Transaction Removed'
+      })
       refetch()
     }
   })

@@ -56,8 +56,5 @@ export default memo(AreaChart, (props, nextProps) => {
   const prevPeriod = props.period.map((p) => p.toISOString())
   const nextPeriod = nextProps.period.map((p) => p.toISOString())
 
-  console.log(isEqual(prevPeriod, nextPeriod))
-  console.log(prevPeriod, nextPeriod)
-
   return isEqual(prevPeriod, nextPeriod)
 })
