@@ -129,7 +129,7 @@ const Asset: FC<Props> = ({ match }) => {
     <StyledBaseContainer direction="vertical" size={32}>
       <StyledTitleContainer>
         <Space direction="vertical">
-          <Typography.Title level={3}>Your Portfolio</Typography.Title>
+          <Typography.Title level={3}>My Portfolio</Typography.Title>
           <Typography.Text type="secondary">Accurately tracking your crypto investments</Typography.Text>
         </Space>
 
