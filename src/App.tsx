@@ -50,7 +50,7 @@ const Header: FC = () => {
       <Link to={Routes.Assets}>Block Tracker</Link>
 
       <StyledSpace>
-        <StyledButton type="primary" onClick={() => history.push(Routes.News)}>
+        <StyledButton type="link" onClick={() => history.push(Routes.News)}>
           Crypto News
         </StyledButton>
         <StyledButton type="primary" onClick={() => history.push(Routes.Settings)}>
