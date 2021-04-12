@@ -42,7 +42,7 @@ const AreaChart: React.FC<{ period: Period }> = ({ period }) => {
     yField: 'balance',
     xField: 'date',
     line: {
-      size: 0.5,
+      size: 1.5,
       color: '#1da57a'
     },
     padding: 60,
@@ -54,6 +54,7 @@ const AreaChart: React.FC<{ period: Period }> = ({ period }) => {
       min,
       max
     },
+    autoFit: true,
     animation: false,
     areaStyle: function areaStyle() {
       return { fill: 'rgba(29, 165, 122, 0.4)' }
