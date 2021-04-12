@@ -83,7 +83,7 @@ export const getNews = (assets: Array<string>): Promise<Array<CryptoNews>> => {
     .get('https://cryptonews-api.com/api/v1', {
       params: {
         items: 20,
-        tickers: assets.join(','),
+        tickers: assets.join(',') || 'BTC,ETH,BNB',
         token: CRYPTO_NEWS_API_KEY
       }
     })
