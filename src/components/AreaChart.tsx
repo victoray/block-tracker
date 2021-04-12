@@ -43,7 +43,7 @@ const AreaChart: React.FC<{ period: Period }> = ({ period }) => {
     xField: 'date',
     line: {
       size: 1.5,
-      color: '#1da57a'
+      color: 'rgba(29, 165, 122, 0.7)'
     },
     padding: 60,
     xAxis: {
