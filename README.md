@@ -1,10 +1,24 @@
 # Block Tracker
 
 Block tracker is a blockchain tracking application that helps users keep track of their cryptocurrencies.
+The app supports almost all the existing cryptocurrencies and shows the latest
+price for each cryptocurrency. 
+The app uses the [CoinMarketCap API](https://coinmarketcap.com/api/documentation/v1/) for retrieving the latest price for all cryptocurrencies.
 
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+[Live App](https://blocktracker.xyz/)
+
+## Requirements
+- [Node](https://nodejs.org/en/download/)
+- [Yarn](https://classic.yarnpkg.com/en/docs/install/)
+
+## Starting a local server
+Run the following commands to get started
+```bash
+yarn install
+yarn start
+```
 
 ## Available Scripts
 
@@ -17,11 +31,6 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
-
-### `yarn test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
 ### `yarn build`
 
