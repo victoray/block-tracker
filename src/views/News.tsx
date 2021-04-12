@@ -25,7 +25,7 @@ const News: FC = () => {
       {mutation.data.map((news, index) => (
         <Card style={{ width: '100%', marginTop: 16 }} key={index}>
           <Meta
-            avatar={<Avatar src={news.image_url} />}
+            avatar={<Avatar src={news.image_url} shape="square" size={125} />}
             title={
               <a href={news.news_url} target="_blank" rel="noreferrer">
                 {news.title}
