@@ -51,6 +51,7 @@ const Asset: FC<Props> = ({ match }) => {
     `transactions-${match.params.asset}`,
     () => getTransactions(match.params.asset),
     {
+      refetchInterval: 5000,
       onSuccess: (transactions) => {
         if (!transactions.length) {
           history.push(Routes.Assets)
