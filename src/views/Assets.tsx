@@ -75,7 +75,8 @@ const Assets: FC = () => {
   const { setCurrentCoin } = useContext(AppContext)
 
   const { isLoading, data, refetch } = useQuery('assets', getAssets, {
-    refetchInterval: 2500
+    refetchInterval: 2500,
+    cacheTime: 0
   })
   const mutation = useMutation(deleteAsset, {
     onSuccess: () => {
