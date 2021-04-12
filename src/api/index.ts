@@ -6,7 +6,7 @@ import { FIREBASE_APP } from '../constants/Firebase'
 
 import { AppSettings, Asset, Balance, CryptoNews, Series, Transaction } from './types'
 
-const BASE_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8000'
+const BASE_URL = process.env.REACT_APP_API_URL || 'https://blocktracker.herokuapp.com'
 const CRYPTO_NEWS_API_KEY = process.env.REACT_APP_CRYPTO_NEWS_API_KEY || 'wvmbedjsa1pucmfct8pkpo8swss0v5n02oniywly'
 const api = axios.create({
   baseURL: BASE_URL
