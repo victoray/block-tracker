@@ -27,7 +27,9 @@ const StyledImage = styled.img`
 
 const AddAsset: FC = () => {
   const { setCurrentCoin } = useContext(AppContext)
-  const { data: coinList } = useQuery('coinList', getCoinList)
+  const { data: coinList } = useQuery('coinList', getCoinList, {
+    cacheTime: Number.MAX_SAFE_INTEGER
+  })
   const [value, setValue] = useState('')
 
   if (!coinList) {
